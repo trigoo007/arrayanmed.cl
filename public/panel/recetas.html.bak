@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Recetas - Centro Médico Infantil Arrayán</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700<link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Comic+Neue:wght@400;700&family=Patrick+Hand&family=Short+Stack&display=swap" rel="stylesheet">family=Quicksand:wght@400;500;600;700<link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Comic+Neue:wght@400;700&family=Patrick+Hand&family=Short+Stack&display=swap" rel="stylesheet">display=swap" rel="stylesheet">family=Quicksand:wght@400;500;600;700<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700<link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Comic+Neue:wght@400;700&family=Patrick+Hand&family=Short+Stack&display=swap" rel="stylesheet">family=Quicksand:wght@400;500;600;700<link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Comic+Neue:wght@400;700&family=Patrick+Hand&family=Short+Stack&display=swap" rel="stylesheet">display=swap" rel="stylesheet">display=swap" rel="stylesheet">family=Quicksand:wght@400;500;600;700<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700<link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Comic+Neue:wght@400;700&family=Patrick+Hand&family=Short+Stack&display=swap" rel="stylesheet">family=Quicksand:wght@400;500;600;700<link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Comic+Neue:wght@400;700&family=Patrick+Hand&family=Short+Stack&display=swap" rel="stylesheet">display=swap" rel="stylesheet">family=Quicksand:wght@400;500;600;700<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700<link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Comic+Neue:wght@400;700&family=Patrick+Hand&family=Short+Stack&display=swap" rel="stylesheet">family=Quicksand:wght@400;500;600;700<link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Comic+Neue:wght@400;700&family=Patrick+Hand&family=Short+Stack&display=swap" rel="stylesheet">display=swap" rel="stylesheet">display=swap" rel="stylesheet">display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="../js/firebase-config.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+    <div class="panel-container">
+        <!-- Barra lateral -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <img src="../img/logo.svg" alt="Logo" class="sidebar-logo">
+                <h2>Centro Médico</h2>
+            </div>
+            
+     <nav class="sidebar-nav">
+          <a href="recetas.html" class="nav-item active" data-requiere-permiso="recetas">
+             <span class="nav-icon">📝</span>
+             <span class="nav-text">Recetas</span>
+         </a>
+          <a href="certificados.html" class="nav-item" data-requiere-permiso="certificados">
+             <span class="nav-icon">📄</span>
+             <span class="nav-text">Certificados</span>
+         </a>
+          <a href="usuarios.html" class="nav-item" data-requiere-permiso="usuarios">
+             <span class="nav-icon">👥</span>
+             <span class="nav-text">Usuarios</span>
+         </a>
+    </nav>
+             <div class="sidebar-footer">
+                <div id="userInfo" class="user-info">
+                    <span id="userEmail"></span>
+                    <span id="userRole" class="user-role"></span>
+                </div>
+                <button id="logoutBtn" class="btn btn-outline">Cerrar sesión</button>
+            </div>
+        </div>
+        
+        <!-- Contenido principal -->
+        <div class="main-panel">
+            <header class="panel-header">
+                <h1>Generador de Recetas Médicas</h1>
+            </header>
+            
+            <div class="panel-content">
+                <div class="form-container">
+                    <form id="recetaForm">
+                        <div class="form-section">
+                            <h3>Datos del Paciente</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="patientName">Nombre del Paciente</label>
+                                    <input type="text" id="patientName" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="patientRut">RUT</label>
+                                    <input type="text" id="patientRut" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="patientAge">Edad</label>
+                                    <input type="number" id="patientAge" min="0" max="120" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="patientGender">Género</label>
+                                    <select id="patientGender" required>
+                                        <option value="">Seleccionar...</option>
+                                        <option value="Masculino">Masculino</option>
+                                        <option value="Femenino">Femenino</option>
+                                        <option value="No binario">No binario</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-section">
+                            <h3>Medicamento e Indicaciones</h3>
+                            <div class="form-group">
+                                <label for="medicamento">Medicamento</label>
+                                <input type="text" id="medicamento" required>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="dosis">Dosis</label>
+                                    <input type="text" id="dosis" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="via">Vía de administración</label>
+                                    <select id="via" required>
+                                        <option value="">Seleccionar...</option>
+                                        <option value="Oral">Oral</option>
+                                        <option value="Sublingual">Sublingual</option>
+                                        <option value="Tópica">Tópica</option>
+                                        <option value="Intravenosa">Intravenosa</option>
+                                        <option value="Intramuscular">Intramuscular</option>
+                                        <option value="Subcutánea">Subcutánea</option>
+                                        <option value="Inhalatoria">Inhalatoria</option>
+                                        <option value="Rectal">Rectal</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="frecuencia">Frecuencia</label>
+                                <input type="text" id="frecuencia" placeholder="Ej: Cada 8 horas" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="duracion">Duración del tratamiento</label>
+                                <input type="text" id="duracion" placeholder="Ej: 7 días" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="indicaciones">Indicaciones adicionales</label>
+                                <textarea id="indicaciones" rows="4"></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="form-section">
+                            <h3>Información Médica</h3>
+                            <div class="form-group">
+                                <label for="diagnostico">Diagnóstico</label>
+                                <input type="text" id="diagnostico">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="fechaEmision">Fecha de emisión</label>
+                                <input type="date" id="fechaEmision" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" id="previewBtn" class="btn btn-secondary">Vista previa</button>
+                            <button type="submit" class="btn btn-primary">Generar PDF</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div id="previewContainer" class="preview-container" style="display: none;">
+                    <div class="preview-actions">
+                        <button id="editBtn" class="btn btn-secondary">Editar</button>
+                        <button id="downloadBtn" class="btn btn-primary">Descargar PDF</button>
+                    </div>
+                    
+                    <div id="recetaPreview" class="preview-content">
+                        <!-- Aquí se generará la vista previa de la receta -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="../js/auth.js"></script>
+    <script src="../js/recetas.js"></script>
+    <script src="../js/roles.js"></script>
+</body>
+</html>

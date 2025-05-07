@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil - Centro Médico Infantil Arrayán</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700<link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Comic+Neue:wght@400;700&family=Patrick+Hand&family=Short+Stack&display=swap" rel="stylesheet">family=Quicksand:wght@400;500;600;700<link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Comic+Neue:wght@400;700&family=Patrick+Hand&family=Short+Stack&display=swap" rel="stylesheet">display=swap" rel="stylesheet">family=Quicksand:wght@400;500;600;700<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700<link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Comic+Neue:wght@400;700&family=Patrick+Hand&family=Short+Stack&display=swap" rel="stylesheet">family=Quicksand:wght@400;500;600;700<link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Comic+Neue:wght@400;700&family=Patrick+Hand&family=Short+Stack&display=swap" rel="stylesheet">display=swap" rel="stylesheet">display=swap" rel="stylesheet">family=Quicksand:wght@400;500;600;700<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700<link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Comic+Neue:wght@400;700&family=Patrick+Hand&family=Short+Stack&display=swap" rel="stylesheet">family=Quicksand:wght@400;500;600;700<link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Comic+Neue:wght@400;700&family=Patrick+Hand&family=Short+Stack&display=swap" rel="stylesheet">display=swap" rel="stylesheet">family=Quicksand:wght@400;500;600;700<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700<link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Comic+Neue:wght@400;700&family=Patrick+Hand&family=Short+Stack&display=swap" rel="stylesheet">family=Quicksand:wght@400;500;600;700<link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Comic+Neue:wght@400;700&family=Patrick+Hand&family=Short+Stack&display=swap" rel="stylesheet">display=swap" rel="stylesheet">display=swap" rel="stylesheet">display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="../js/firebase-config.js"></script>
+</head>
+<body>
+    <div class="panel-container">
+        <!-- Barra lateral -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <img src="../img/logo.svg" alt="Logo" class="sidebar-logo">
+                <h2>Centro Médico</h2>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="recetas.html" class="nav-item" data-requiere-permiso="recetas">
+                    <span class="nav-icon">📝</span>
+                    <span class="nav-text">Recetas</span>
+                </a>
+                <a href="certificados.html" class="nav-item" data-requiere-permiso="certificados">
+                    <span class="nav-icon">📄</span>
+                    <span class="nav-text">Certificados</span>
+                </a>
+                <a href="usuarios.html" class="nav-item" data-requiere-permiso="usuarios">
+                    <span class="nav-icon">👥</span>
+                    <span class="nav-text">Usuarios</span>
+                </a>
+                <a href="perfil.html" class="nav-item active">
+                    <span class="nav-icon">👤</span>
+                    <span class="nav-text">Mi Perfil</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div id="userInfo" class="user-info">
+                    <span id="userEmail"></span>
+                    <span id="userRole" class="user-role"></span>
+                </div>
+                <button id="logoutBtn" class="btn btn-outline">Cerrar sesión</button>
+            </div>
+        </div>
+        
+        <!-- Contenido principal -->
+        <div class="main-panel">
+            <header class="panel-header">
+                <h1>Mi Perfil</h1>
+            </header>
+            
+            <div class="panel-content">
+                <div id="profileContainer" class="profile-container">
+                    <div class="profile-section">
+                        <h3>Información Personal</h3>
+                        <div class="profile-info">
+                            <div class="info-group">
+                                <label>Correo electrónico:</label>
+                                <p id="profileEmail">Cargando...</p>
+                            </div>
+                            <div class="info-group">
+                                <label>Nombre:</label>
+                                <p id="profileName">Cargando...</p>
+                            </div>
+                            <div class="info-group">
+                                <label>Especialidad:</label>
+                                <p id="profileSpecialty">Cargando...</p>
+                            </div>
+                            <div class="info-group">
+                                <label>Rol:</label>
+                                <p id="profileRole">Cargando...</p>
+                            </div>
+                            <div class="info-group">
+                                <label>Estado:</label>
+                                <p id="profileStatus">Cargando...</p>
+                            </div>
+                            <div class="info-group">
+                                <label>Fecha de registro:</label>
+                                <p id="profileRegDate">Cargando...</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-section">
+                        <h3>Cambiar Contraseña</h3>
+                        <div id="passwordMessage" class="message"></div>
+                        <form id="changePasswordForm">
+                            <div class="form-group">
+                                <label for="currentPassword">Contraseña actual</label>
+                                <input type="password" id="currentPassword" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="newPassword">Nueva contraseña</label>
+                                <input type="password" id="newPassword" minlength="6" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="confirmNewPassword">Confirmar nueva contraseña</label>
+                                <input type="password" id="confirmNewPassword" minlength="6" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Actualizar Contraseña</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/auth.js"></script>
+    <script src="../js/roles.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const db = firebase.firestore();
+            const profileEmail = document.getElementById('profileEmail');
+            const profileName = document.getElementById('profileName');
+            const profileSpecialty = document.getElementById('profileSpecialty');
+            const profileRole = document.getElementById('profileRole');
+            const profileStatus = document.getElementById('profileStatus');
+            const profileRegDate = document.getElementById('profileRegDate');
+            const changePasswordForm = document.getElementById('changePasswordForm');
+            const passwordMessage = document.getElementById('passwordMessage');
+            
+            // Cargar información del perfil
+            firebase.auth().onAuthStateChanged(async function(user) {
+                if (user) {
+                    profileEmail.textContent = user.email;
+                    
+                    try {
+                        const doc = await db.collection('usuarios').doc(user.uid).get();
+                        
+                        if (doc.exists) {
+                            const userData = doc.data();
+                            
+                            profileName.textContent = userData.nombre || 'No especificado';
+                            profileSpecialty.textContent = userData.especialidad || 'No especificada';
+                            
+                            // Formatear rol
+                            const role = userData.rol || 'pendiente';
+                            profileRole.textContent = role.charAt(0).toUpperCase() + role.slice(1);
+                            
+                            // Formatear estado
+                            const status = userData.estado || 'pendiente';
+                            profileStatus.textContent = status.charAt(0).toUpperCase() + status.slice(1);
+                            
+                            // Formatear fecha
+                            if (userData.fechaRegistro) {
+                                const date = new Date(userData.fechaRegistro.seconds * 1000);
+                                profileRegDate.textContent = date.toLocaleDateString();
+                            } else {
+                                profileRegDate.textContent = 'No disponible';
+                            }
+                        } else {
+                            console.log('No se encontró información del usuario');
+                        }
+                    } catch (error) {
+                        console.error('Error obteniendo información del usuario:', error);
+                    }
+                } else {
+                    window.location.href = '../login.html';
+                }
+            });
+            
+            // Cambiar contraseña
+            changePasswordForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const currentPassword = document.getElementById('currentPassword').value;
+                const newPassword = document.getElementById('newPassword').value;
+                const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+                
+                // Verificar que las contraseñas coincidan
+                if (newPassword !== confirmNewPassword) {
+                    showPasswordMessage('Las contraseñas nuevas no coinciden', 'error');
+                    return;
+                }
+                
+                const user = firebase.auth().currentUser;
+                
+                // Reautenticar usuario
+                const credential = firebase.auth.EmailAuthProvider.credential(
+                    user.email, 
+                    currentPassword
+                );
+                
+                user.reauthenticateWithCredential(credential).then(() => {
+                    // Cambiar contraseña
+                    user.updatePassword(newPassword).then(() => {
+                        showPasswordMessage('Contraseña actualizada correctamente', 'success');
+                        changePasswordForm.reset();
+                    }).catch((error) => {
+                        console.error('Error al actualizar contraseña:', error);
+                        showPasswordMessage('Error al actualizar contraseña', 'error');
+                    });
+                }).catch((error) => {
+                    console.error('Error de reautenticación:', error);
+                    showPasswordMessage('Contraseña actual incorrecta', 'error');
+                });
+            });
+            
+            function showPasswordMessage(message, type) {
+                passwordMessage.textContent = message;
+                passwordMessage.className = `message ${type}`;
+                passwordMessage.style.display = 'block';
+                
+                // Ocultar mensaje después de 5 segundos
+                setTimeout(() => {
+                    passwordMessage.style.display = 'none';
+                }, 5000);
+            }
+        });
+    </script>
+</body>
+</html>
