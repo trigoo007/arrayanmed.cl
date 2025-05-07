@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "Bash(ls:*)",
+      "Bash(chmod:*)",
+      "Bash(/Users/rodrigomunoz/Desktop/arrayanmed.cl/fix_fonts.sh)",
+      "Bash(chmod:*)",
+      "Bash(/Users/rodrigomunoz/Desktop/arrayanmed.cl/fix_fonts.sh)",
+      "Bash(/Users/rodrigomunoz/Desktop/arrayanmed.cl/fix_html_files.sh)",
+      "Bash(/Users/rodrigomunoz/Desktop/arrayanmed.cl/fix_html_files.sh)",
+      "Bash(/Users/rodrigomunoz/Desktop/arrayanmed.cl/replace_fonts.sh)",
+      "Bash(/Users/rodrigomunoz/Desktop/arrayanmed.cl/replace_fonts.sh)"
+    ],
+    "deny": []
+  }
+}

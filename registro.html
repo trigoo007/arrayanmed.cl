@@ -1,0 +1,484 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - Centro Médico Infantil Arrayán</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    
+    <style>
+        /* Estos valores están definidos en styles.css y son solo para referencia */
+        /*
+        :root {
+            --primary: #98aa71;
+            --primary-dark: #7A8B58;
+            --primary-light: #ACBE85;
+            --secondary: #FAF8F3;
+            --accent: #C1CDA3;
+            --light: #FFFFFF;
+            --text: #4A4A4A;
+            --light-text: #76797A;
+            --success: #98AA71;
+            --warning: #E9D79F;
+            --error: #E77C7C;
+        }
+        */
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-body);
+            line-height: 1.6;
+            color: var(--text);
+            background-color: var(--secondary);
+            background-image: linear-gradient(120deg, #FAF8F3 0%, #DEEBC1 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .register-wrapper {
+            width: 100%;
+            max-width: 500px;
+        }
+        
+        .register-container {
+            background-color: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .register-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .register-header h1 {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-family: var(--font-heading);
+            font-weight: normal;
+        }
+        
+        .register-header p {
+            color: var(--light-text);
+            font-size: 1rem;
+        }
+        
+        .error-message {
+            color: var(--error);
+            background-color: rgba(231, 76, 60, 0.1);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            text-align: center;
+            display: none;
+        }
+
+        .success-message {
+            color: #27ae60;
+            background-color: rgba(163, 228, 215, 0.3);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            text-align: center;
+            display: none;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text);
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid var(--secondary);
+            border-radius: 10px;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            transition: border 0.3s ease;
+        }
+        
+        .form-group input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 14px 24px;
+            font-family: var(--font-body);
+            font-weight: 700;
+            font-size: 1rem;
+            text-align: center;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+        
+        .register-options {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            margin-top: 25px;
+        }
+        
+        .register-options a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .register-options a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+        
+        #loading {
+            display: none;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        #loading .spinner {
+            border: 3px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top: 3px solid var(--primary);
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .debug-panel {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            display: none;
+        }
+        
+        .debug-toggle {
+            background-color: #f1f1f1;
+            color: #333;
+            font-size: 0.8rem;
+            padding: 5px 10px;
+            border-radius: 5px;
+            margin-top: 15px;
+            cursor: pointer;
+            display: inline-block;
+        }
+        
+        @media (max-width: 600px) {
+            .register-container {
+                padding: 30px 20px;
+            }
+            
+            .register-options {
+                flex-direction: column;
+                gap: 10px;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="register-wrapper">
+        <div class="register-container">
+            <div class="register-header">
+                <h1>Centro Médico Infantil Arrayán</h1>
+                <p>Complete el formulario para crear una cuenta</p>
+            </div>
+            
+            <div id="errorMessage" class="error-message"></div>
+            <div id="successMessage" class="success-message"></div>
+            <div id="loading">
+                <div class="spinner"></div>
+                <p>Procesando su registro...</p>
+            </div>
+            
+            <form id="registerForm" class="register-form">
+                <div class="form-group">
+                    <label for="nombre">Nombre completo</label>
+                    <input type="text" id="nombre" placeholder="Dr. Juan Pérez" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="especialidad">Especialidad</label>
+                    <input type="text" id="especialidad" placeholder="Psiquiatra Infantil" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Correo electrónico</label>
+                    <input type="email" id="email" placeholder="ejemplo@arrayanmed.cl" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <input type="password" id="password" placeholder="Mínimo 6 caracteres" minlength="6" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmPassword">Confirmar contraseña</label>
+                    <input type="password" id="confirmPassword" placeholder="Repita su contraseña" required>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-block">Crear cuenta</button>
+            </form>
+            
+            <div class="register-options">
+                <a href="login.html">¿Ya tiene una cuenta? Iniciar sesión</a>
+                <a href="index.html">Volver al inicio</a>
+            </div>
+            
+            <span class="debug-toggle" onclick="toggleDebug()">Mostrar diagnóstico</span>
+            <div id="debugPanel" class="debug-panel"></div>
+        </div>
+    </div>
+    
+    <script>
+        // Función para registrar mensajes de depuración
+        function debugLog(message) {
+            const debugPanel = document.getElementById('debugPanel');
+            const timestamp = new Date().toLocaleTimeString();
+            
+            const entry = document.createElement('div');
+            entry.innerHTML = `<span style="color: #888">[${timestamp}]</span> ${message}`;
+            debugPanel.appendChild(entry);
+            
+            // Scroll al final
+            debugPanel.scrollTop = debugPanel.scrollHeight;
+            
+            // También registrar en la consola
+            console.log(`[DEBUG] ${message}`);
+        }
+        
+        // Mostrar/ocultar panel de depuración
+        function toggleDebug() {
+            const debugPanel = document.getElementById('debugPanel');
+            if (debugPanel.style.display === 'block') {
+                debugPanel.style.display = 'none';
+                document.querySelector('.debug-toggle').textContent = 'Mostrar diagnóstico';
+            } else {
+                debugPanel.style.display = 'block';
+                document.querySelector('.debug-toggle').textContent = 'Ocultar diagnóstico';
+            }
+        }
+        
+        // Mostrar mensaje de error
+        function showError(message) {
+            const errorElement = document.getElementById('errorMessage');
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+            
+            // Ocultar otros mensajes
+            document.getElementById('successMessage').style.display = 'none';
+            document.getElementById('loading').style.display = 'none';
+            
+            debugLog(`ERROR: ${message}`);
+        }
+        
+        // Mostrar mensaje de éxito
+        function showSuccess(message) {
+            const successElement = document.getElementById('successMessage');
+            successElement.textContent = message;
+            successElement.style.display = 'block';
+            
+            // Ocultar otros mensajes
+            document.getElementById('errorMessage').style.display = 'none';
+            document.getElementById('loading').style.display = 'none';
+            
+            debugLog(`ÉXITO: ${message}`);
+        }
+        
+        // Mostrar/ocultar indicador de carga
+        function setLoading(isLoading) {
+            const loadingElement = document.getElementById('loading');
+            loadingElement.style.display = isLoading ? 'block' : 'none';
+            
+            // Deshabilitar el formulario durante la carga
+            const form = document.getElementById('registerForm');
+            const inputs = form.querySelectorAll('input, button');
+            
+            inputs.forEach(input => {
+                input.disabled = isLoading;
+            });
+            
+            if (isLoading) {
+                debugLog('Iniciando proceso de registro...');
+            }
+        }
+        
+        // Inicializar Firebase (solo si no está ya inicializado)
+        debugLog('Configurando Firebase...');
+        
+        // Obtener servicios de Firebase
+        const services = window.firebaseApp.init();
+        debugLog('Firebase inicializado correctamente');
+        
+        // Referencias a los servicios de Firebase
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        
+        // Verificar que Firebase está funcionando
+        debugLog(`Firebase Auth disponible: ${!!auth}`);
+        debugLog(`Firebase Firestore disponible: ${!!db}`);
+        
+        // Función para registrar un nuevo usuario
+        async function registrarUsuario(email, password, nombre, especialidad) {
+            setLoading(true);
+            
+            try {
+                debugLog(`Intentando crear usuario: ${email}`);
+                
+                // 1. Crear usuario en Firebase Authentication
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+                
+                debugLog(`Usuario creado en Authentication con UID: ${user.uid}`);
+                
+                // 2. Guardar información adicional en Firestore
+                const userData = {
+                    nombre: nombre,
+                    especialidad: especialidad,
+                    email: email,
+                    rol: 'pendiente',
+                    estado: 'pendiente',
+                    fechaRegistro: new Date()
+                };
+                
+                debugLog('Guardando información en Firestore...');
+                
+                await db.collection('usuarios').doc(user.uid).set(userData);
+                
+                debugLog('Información guardada correctamente en Firestore');
+                
+                // Mostrar mensaje de éxito
+                showSuccess('Cuenta creada exitosamente. Su cuenta está pendiente de aprobación por un administrador.');
+                
+                // Limpiar formulario
+                document.getElementById('registerForm').reset();
+                
+                // Redirigir al login después de 5 segundos
+                debugLog('Redirigiendo a login en 5 segundos...');
+                setTimeout(function() {
+                    window.location.href = 'login.html';
+                }, 5000);
+                
+            } catch (error) {
+                // Manejar errores
+                debugLog(`Error en el proceso de registro: ${error.code} - ${error.message}`);
+                
+                let mensajeError = '';
+                
+                switch(error.code) {
+                    case 'auth/email-already-in-use':
+                        mensajeError = 'Este correo electrónico ya está registrado';
+                        break;
+                    case 'auth/invalid-email':
+                        mensajeError = 'Formato de correo electrónico inválido';
+                        break;
+                    case 'auth/weak-password':
+                        mensajeError = 'La contraseña es demasiado débil. Use al menos 6 caracteres';
+                        break;
+                    case 'auth/network-request-failed':
+                        mensajeError = 'Error de conexión. Verifique su conexión a internet';
+                        break;
+                    default:
+                        mensajeError = `Error al crear la cuenta: ${error.message}`;
+                }
+                
+                showError(mensajeError);
+            } finally {
+                setLoading(false);
+            }
+        }
+        
+        // Cuando el documento está listo
+        document.addEventListener('DOMContentLoaded', function() {
+            debugLog('Página cargada completamente');
+            
+            const registerForm = document.getElementById('registerForm');
+            
+            if (registerForm) {
+                registerForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    
+                    // Ocultar mensajes anteriores
+                    document.getElementById('errorMessage').style.display = 'none';
+                    document.getElementById('successMessage').style.display = 'none';
+                    
+                    // Obtener valores del formulario
+                    const nombre = document.getElementById('nombre').value.trim();
+                    const especialidad = document.getElementById('especialidad').value.trim();
+                    const email = document.getElementById('email').value.trim();
+                    const password = document.getElementById('password').value;
+                    const confirmPassword = document.getElementById('confirmPassword').value;
+                    
+                    debugLog(`Formulario enviado - Email: ${email}`);
+                    
+                    // Validar que las contraseñas coincidan
+                    if (password !== confirmPassword) {
+                        showError('Las contraseñas no coinciden');
+                        return;
+                    }
+                    
+                    // Validar que la contraseña tenga al menos 6 caracteres
+                    if (password.length < 6) {
+                        showError('La contraseña debe tener al menos 6 caracteres');
+                        return;
+                    }
+                    
+                    // Registrar usuario
+                    await registrarUsuario(email, password, nombre, especialidad);
+                });
+            } else {
+                debugLog('ADVERTENCIA: No se encontró el formulario de registro');
+            }
+        });
+    </script>
+</body>
+</html>

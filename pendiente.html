@@ -1,0 +1,88 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuenta Pendiente - Centro Médico Infantil Arrayán</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <style>
+        .pending-container {
+            max-width: 500px;
+            margin: 100px auto;
+            padding: 40px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .pending-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--warning);
+        }
+        
+        .pending-title {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+        
+        .pending-message {
+            margin-bottom: 30px;
+            color: var(--light-text);
+        }
+        
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body class="login-page">
+    <div class="pending-container">
+        <div class="pending-icon">⏳</div>
+        <h1 class="pending-title">Cuenta Pendiente de Aprobación</h1>
+        <div class="pending-message">
+            <p>Su cuenta ha sido creada exitosamente, pero está pendiente de aprobación por un administrador.</p>
+            <p>Recibirá una notificación cuando su cuenta sea aprobada.</p>
+            <p>Para más información, puede contactarnos a través de <a href="mailto:info@arrayanmed.cl">info@arrayanmed.cl</a></p>
+        </div>
+        <div class="btn-group">
+            <a href="index.html" class="btn btn-secondary">Volver al Inicio</a>
+            <button id="logoutBtn" class="btn btn-primary">Cerrar Sesión</button>
+        </div>
+    </div>
+
+    <script>
+        // Obtener servicios de Firebase
+        const services = window.firebaseApp.init();
+
+        // Botón de cerrar sesión
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            firebase.auth().signOut().then(() => {
+                window.location.href = 'index.html';
+            }).catch((error) => {
+                console.error('Error al cerrar sesión:', error);
+            });
+        });
+
+        // Verificar estado de autenticación
+        firebase.auth().onAuthStateChanged(async function(user) {
+            if (!user) {
+                // Si no hay usuario autenticado, redirigir al inicio
+                window.location.href = 'index.html';
+            }
+        });
+    </script>
+</body>
+</html>

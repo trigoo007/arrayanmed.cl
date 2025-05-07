@@ -1,0 +1,315 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administración de Usuarios - Centro Médico Infantil Arrayán</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="../js/firebase-config.js"></script>
+</head>
+<body>
+    <div class="panel-container">
+        <!-- Barra lateral -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <img src="../img/logo.svg" alt="Logo" class="sidebar-logo">
+                <h2>Centro Médico</h2>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="recetas.html" class="nav-item" data-requiere-permiso="recetas">
+                    <span class="nav-icon">📝</span>
+                    <span class="nav-text">Recetas</span>
+                </a>
+                <a href="certificados.html" class="nav-item" data-requiere-permiso="certificados">
+                    <span class="nav-icon">📄</span>
+                    <span class="nav-text">Certificados</span>
+                </a>
+                <a href="usuarios.html" class="nav-item active" data-requiere-permiso="usuarios">
+                    <span class="nav-icon">👥</span>
+                    <span class="nav-text">Usuarios</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div id="userInfo" class="user-info">
+                    <span id="userEmail"></span>
+                    <span id="userRole" class="user-role"></span>
+                </div>
+                <button id="logoutBtn" class="btn btn-outline">Cerrar sesión</button>
+            </div>
+        </div>
+        
+        <!-- Contenido principal -->
+        <div class="main-panel">
+            <header class="panel-header">
+                <h1>Administración de Usuarios</h1>
+            </header>
+            
+            <div class="panel-content">
+                <div class="admin-controls">
+                    <h2>Usuarios del Sistema</h2>
+                    <p>Desde aquí puede gestionar los usuarios, aprobar cuentas pendientes y asignar roles.</p>
+                    
+                    <div class="filter-controls">
+                        <div class="form-group">
+                            <label for="filterEstado">Filtrar por estado:</label>
+                            <select id="filterEstado" class="filter-select">
+                                <option value="todos">Todos</option>
+                                <option value="pendiente">Pendientes</option>
+                                <option value="aprobado">Aprobados</option>
+                                <option value="rechazado">Rechazados</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="filterRol">Filtrar por rol:</label>
+                            <select id="filterRol" class="filter-select">
+                                <option value="todos">Todos</option>
+                                <option value="admin">Administrador</option>
+                                <option value="medico">Médico</option>
+                                <option value="psicologo">Psicólogo</option>
+                                <option value="pendiente">Pendiente</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div id="usuariosContainer" class="usuarios-container">
+                        <div class="loading-message">Cargando usuarios...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal para editar usuario -->
+    <div id="editUserModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Editar Usuario</h2>
+            <form id="editUserForm">
+                <input type="hidden" id="editUserId">
+                
+                <div class="form-group">
+                    <label for="editUserEmail">Email:</label>
+                    <input type="email" id="editUserEmail" readonly>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editUserRol">Rol:</label>
+                    <select id="editUserRol">
+                        <option value="admin">Administrador</option>
+                        <option value="medico">Médico</option>
+                        <option value="psicologo">Psicólogo</option>
+                        <option value="pendiente">Pendiente</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editUserEstado">Estado:</label>
+                    <select id="editUserEstado">
+                        <option value="aprobado">Aprobado</option>
+                        <option value="pendiente">Pendiente</option>
+                        <option value="rechazado">Rechazado</option>
+                    </select>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" id="deleteUserBtn" class="btn btn-delete">Eliminar usuario</button>
+                    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script src="../js/auth.js"></script>
+    <script src="../js/roles.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const db = firebase.firestore();
+            const usuariosContainer = document.getElementById('usuariosContainer');
+            const filterEstado = document.getElementById('filterEstado');
+            const filterRol = document.getElementById('filterRol');
+            const editUserModal = document.getElementById('editUserModal');
+            const editUserForm = document.getElementById('editUserForm');
+            const closeBtn = document.querySelector('.close-btn');
+            const deleteUserBtn = document.getElementById('deleteUserBtn');
+            
+            let currentFilters = {
+                estado: 'todos',
+                rol: 'todos'
+            };
+            
+            // Función para cargar usuarios
+            function loadUsers() {
+                usuariosContainer.innerHTML = '<div class="loading-message">Cargando usuarios...</div>';
+                
+                db.collection('usuarios').get().then((snapshot) => {
+                    let usuarios = [];
+                    
+                    snapshot.forEach(doc => {
+                        usuarios.push({
+                            id: doc.id,
+                            ...doc.data()
+                        });
+                    });
+                    
+                    // Aplicar filtros
+                    if (currentFilters.estado !== 'todos') {
+                        usuarios = usuarios.filter(u => u.estado === currentFilters.estado);
+                    }
+                    
+                    if (currentFilters.rol !== 'todos') {
+                        usuarios = usuarios.filter(u => u.rol === currentFilters.rol);
+                    }
+                    
+                    // Renderizar lista de usuarios
+                    renderUsers(usuarios);
+                }).catch(error => {
+                    console.error("Error obteniendo usuarios:", error);
+                    usuariosContainer.innerHTML = '<div class="error-message">Error al cargar usuarios</div>';
+                });
+            }
+            
+            // Función para renderizar usuarios
+            function renderUsers(usuarios) {
+                if (usuarios.length === 0) {
+                    usuariosContainer.innerHTML = '<div class="no-results">No se encontraron usuarios con los filtros seleccionados</div>';
+                    return;
+                }
+                
+                let html = '<table class="usuarios-table">';
+                html += '<thead><tr><th>Email</th><th>Rol</th><th>Estado</th><th>Fecha registro</th><th>Acciones</th></tr></thead>';
+                html += '<tbody>';
+                
+                usuarios.forEach(usuario => {
+                    const fechaRegistro = usuario.fechaRegistro ? new Date(usuario.fechaRegistro.seconds * 1000).toLocaleDateString() : 'N/D';
+                    const rolDisplay = usuario.rol ? usuario.rol.charAt(0).toUpperCase() + usuario.rol.slice(1) : 'Pendiente';
+                    const estadoDisplay = usuario.estado ? usuario.estado.charAt(0).toUpperCase() + usuario.estado.slice(1) : 'Pendiente';
+                    
+                    let estadoClass = '';
+                    switch(usuario.estado) {
+                        case 'aprobado':
+                            estadoClass = 'status-approved';
+                            break;
+                        case 'pendiente':
+                            estadoClass = 'status-pending';
+                            break;
+                        case 'rechazado':
+                            estadoClass = 'status-rejected';
+                            break;
+                    }
+                    
+                    html += `<tr>
+                        <td>${usuario.email || 'Sin email'}</td>
+                        <td>${rolDisplay}</td>
+                        <td><span class="status-badge ${estadoClass}">${estadoDisplay}</span></td>
+                        <td>${fechaRegistro}</td>
+                        <td><button class="btn btn-small edit-user-btn" data-id="${usuario.id}">Editar</button></td>
+                    </tr>`;
+                });
+                
+                html += '</tbody></table>';
+                usuariosContainer.innerHTML = html;
+                
+                // Agregar eventos a los botones de editar
+                document.querySelectorAll('.edit-user-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const userId = this.getAttribute('data-id');
+                        openEditModal(userId);
+                    });
+                });
+            }
+            
+            // Función para abrir el modal de edición
+            function openEditModal(userId) {
+                db.collection('usuarios').doc(userId).get().then(doc => {
+                    if (doc.exists) {
+                        const userData = doc.data();
+                        
+                        document.getElementById('editUserId').value = userId;
+                        document.getElementById('editUserEmail').value = userData.email || '';
+                        document.getElementById('editUserRol').value = userData.rol || 'pendiente';
+                        document.getElementById('editUserEstado').value = userData.estado || 'pendiente';
+                        
+                        editUserModal.style.display = 'flex';
+                    } else {
+                        alert('No se encontró información del usuario');
+                    }
+                }).catch(error => {
+                    console.error("Error obteniendo datos del usuario:", error);
+                    alert('Error al cargar datos del usuario');
+                });
+            }
+            
+            // Evento de filtros
+            filterEstado.addEventListener('change', function() {
+                currentFilters.estado = this.value;
+                loadUsers();
+            });
+            
+            filterRol.addEventListener('change', function() {
+                currentFilters.rol = this.value;
+                loadUsers();
+            });
+            
+            // Evento para editar usuario
+            editUserForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const userId = document.getElementById('editUserId').value;
+                const rol = document.getElementById('editUserRol').value;
+                const estado = document.getElementById('editUserEstado').value;
+                
+                db.collection('usuarios').doc(userId).update({
+                    rol: rol,
+                    estado: estado,
+                    fechaActualizacion: new Date()
+                }).then(() => {
+                    alert('Usuario actualizado correctamente');
+                    editUserModal.style.display = 'none';
+                    loadUsers();
+                }).catch(error => {
+                    console.error("Error actualizando usuario:", error);
+                    alert('Error al actualizar usuario');
+                });
+            });
+            
+            // Evento para eliminar usuario
+            deleteUserBtn.addEventListener('click', function() {
+                if (confirm('¿Está seguro de eliminar este usuario? Esta acción no se puede deshacer.')) {
+                    const userId = document.getElementById('editUserId').value;
+                    
+                    db.collection('usuarios').doc(userId).delete().then(() => {
+                        alert('Usuario eliminado correctamente');
+                        editUserModal.style.display = 'none';
+                        loadUsers();
+                    }).catch(error => {
+                        console.error("Error eliminando usuario:", error);
+                        alert('Error al eliminar usuario');
+                    });
+                }
+            });
+            
+            // Cerrar modal
+            closeBtn.addEventListener('click', function() {
+                editUserModal.style.display = 'none';
+            });
+            
+            window.addEventListener('click', function(e) {
+                if (e.target === editUserModal) {
+                    editUserModal.style.display = 'none';
+                }
+            });
+            
+            // Cargar usuarios al inicio
+            loadUsers();
+        });
+    </script>
+</body>
+</html>
