@@ -399,41 +399,78 @@
             border: 1px dashed var(--primary-light);
         }
         
-        .contact-info {
-            text-align: center;
+        .contact-card {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: var(--spacing-md);
             margin: var(--spacing-lg) 0;
             padding: var(--spacing-md);
-            background-color: rgba(255, 255, 255, 0.8);
-            border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
             position: relative;
         }
         
-        .contact-info p {
-            margin-bottom: var(--spacing-xs);
+        .contact-item {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            border-radius: 30px;
+            padding: 12px 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--primary);
+            min-width: 280px;
         }
         
-        .contact-info a {
+        .contact-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+            background-color: var(--accent-light);
+        }
+        
+        .contact-icon {
+            font-size: 1.5rem;
             color: var(--primary);
-            text-decoration: none;
+            margin-right: var(--spacing-md);
+            background-color: var(--accent-light);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .contact-details {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .contact-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--light-text);
+            margin-bottom: 3px;
+        }
+        
+        .contact-card a {
+            color: var(--primary);
             font-weight: 600;
+            text-decoration: none;
             transition: all 0.3s ease;
         }
         
-        .contact-info a:hover {
+        .contact-card a:hover {
             color: var(--primary-dark);
             text-decoration: underline;
         }
         
         .address-highlight {
             display: inline-block;
-            margin-top: var(--spacing-xs);
-            padding: var(--spacing-sm);
-            background-color: rgba(152, 170, 113, 0.1);
-            border-radius: 10px;
             font-weight: 600;
             color: var(--text);
-            border-left: 3px solid var(--primary);
+            position: relative;
         }
         
         .access-button {
@@ -573,6 +610,12 @@
                 right: -20px;
             }
             
+            .contact-item {
+                width: 100%;
+                min-width: 100%;
+                margin: 0 var(--spacing-md);
+            }
+            
             .countdown {
                 flex-wrap: wrap;
                 justify-content: center;
@@ -598,7 +641,6 @@
             }
             
             .address-highlight {
-                padding: var(--spacing-xs);
                 font-size: 0.9rem;
             }
         }
@@ -630,6 +672,21 @@
                 top: 20px;
             }
             
+            .contact-item {
+                padding: 10px 15px;
+            }
+            
+            .contact-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+                margin-right: var(--spacing-sm);
+            }
+            
+            .contact-label {
+                font-size: 0.75rem;
+            }
+            
             .countdown-number {
                 font-size: 2rem;
             }
@@ -655,7 +712,6 @@
             
             .address-highlight {
                 font-size: 0.85rem;
-                padding: 3px var(--spacing-xs);
             }
         }
     </style>
@@ -668,10 +724,21 @@
             </div>
             <h1>Centro Médico Infantil Arrayán</h1>
             <h3>Especialistas en Salud Mental Infantil y Adolescente</h3>
-            <div class="contact-info">
-                <p>Contacto: <a href="mailto:info@arrayanmed.cl"><i class="fas fa-envelope"></i> info@arrayanmed.cl</a></p>
-                <p><i class="fas fa-map-marker-alt"></i> Dirección:</p>
-                <span class="address-highlight">Avenida Las Condes 10465 Oficina 817A, Las Condes, Santiago</span>
+            <div class="contact-card">
+                <div class="contact-item">
+                    <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                    <div class="contact-details">
+                        <span class="contact-label">Contáctanos:</span>
+                        <a href="mailto:info@arrayanmed.cl">info@arrayanmed.cl</a>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                    <div class="contact-details">
+                        <span class="contact-label">Encuéntranos en:</span>
+                        <span class="address-highlight">Avenida Las Condes 10465 Of. 817A, Las Condes</span>
+                    </div>
+                </div>
             </div>
             <div style="text-align: center; margin-top: var(--spacing-md);">
                 <a href="login.html" class="access-button"><i class="fas fa-user-md"></i> Acceso Médico</a>
