@@ -48,6 +48,42 @@ async function fetchRssAsJson(rssUrl) {
   }
 }
 
+// Función para simplificar lenguaje científico complejo
+// Adapta textos académicos a un lenguaje más accesible para padres
+function simplifyScientificText(text) {
+  // Mapeo de términos científicos complejos a explicaciones más simples
+  const simplifications = {
+    'neurodevelopmental disorder': 'trastorno del desarrollo neurológico (problemas en el desarrollo del cerebro)',
+    'comorbid condition': 'condición coexistente (cuando hay más de un diagnóstico)',
+    'cognitive behavioral therapy': 'terapia cognitivo-conductual (terapia que trabaja con pensamientos y conductas)',
+    'psychopharmacological treatment': 'tratamiento con medicamentos psiquiátricos',
+    'etiology': 'causa o origen',
+    'symptomatology': 'conjunto de síntomas',
+    'neuroimaging': 'imágenes del cerebro (como resonancias magnéticas)',
+    'psychosocial interventions': 'intervenciones que abordan aspectos psicológicos y sociales',
+    'clinical trials': 'estudios clínicos',
+    'longitudinal study': 'estudio a largo plazo',
+    'meta-analysis': 'análisis que combina resultados de múltiples estudios',
+    'systematic review': 'revisión sistemática de investigaciones',
+    'prevalence': 'frecuencia o cantidad de casos',
+    'executive function': 'habilidades cognitivas para planificar y organizarse',
+    'behavioral inhibition': 'capacidad de controlar impulsos o comportamientos',
+    'psychoeducation': 'educación sobre temas de salud mental',
+    'prodromal symptoms': 'síntomas tempranos o iniciales',
+    'psychopathology': 'condiciones de salud mental',
+    'comorbidity': 'presencia de más de un trastorno a la vez'
+  };
+  
+  // Simplificar texto
+  let simplifiedText = text;
+  Object.entries(simplifications).forEach(([complex, simple]) => {
+    const regex = new RegExp('\\b' + complex + '\\b', 'gi');
+    simplifiedText = simplifiedText.replace(regex, simple);
+  });
+  
+  return simplifiedText;
+}
+
 // Función simple para traducir texto de inglés a español
 // En un entorno de producción, se recomendaría usar una API de traducción profesional
 function translateToSpanish(text) {
@@ -98,8 +134,14 @@ async function fetchMentalHealthArticles() {
   try {
     // Lista de fuentes RSS de salud mental confiables
     const sources = [
+      // Fuentes orientadas a padres
       { url: 'https://www.aacap.org/AACAP/Families_and_Youth/RSS_Families.aspx', name: 'AACAP', parentFocused: true },
+      
+      // Fuentes científicas y académicas
+      { url: 'https://jaacap.org/current.rss', name: 'JAACAP', scientific: true },
       { url: 'https://www.nimh.nih.gov/news/science-news/index.xml', name: 'NIMH' },
+      
+      // Fuentes generales de salud mental
       { url: 'https://psychcentral.com/feed', name: 'PsychCentral' },
       { url: 'https://www.who.int/news/item/feed/atom', name: 'World Health Organization' },
       { url: 'https://www.sciencedaily.com/rss/mind_brain/mental_health.xml', name: 'ScienceDaily' },
@@ -191,22 +233,43 @@ async function fetchMentalHealthArticles() {
         // Traducir título y descripción al español si están en inglés
         // (Detección simple: si la mayoría del texto no contiene caracteres españoles como tildes, ñ, etc.)
         const needsTranslation = !(/[áéíóúñüÁÉÍÓÚÑÜ¿¡]/.test(item.title)) && item.title.length > 10;
+        const isScientific = source.scientific || 
+                            /journal|study|research|clinical|abstract|peer-reviewed/i.test(item.title);
         
-        const title = needsTranslation ? translateToSpanish(item.title) : item.title;
+        // Procesar el título
+        let title = item.title;
+        if (needsTranslation) {
+          title = translateToSpanish(title);
+        }
+        if (isScientific) {
+          title = simplifyScientificText(title);
+        }
+        
+        // Procesar la descripción
         let description = '';
-        
         if (item.description) {
           const cleanDesc = item.description.replace(/<\/?[^>]+(>|$)/g, '');
           const truncatedDesc = cleanDesc.substring(0, 200) + '...';
-          description = needsTranslation ? translateToSpanish(truncatedDesc) : truncatedDesc;
+          
+          description = truncatedDesc;
+          if (needsTranslation) {
+            description = translateToSpanish(description);
+          }
+          if (isScientific) {
+            description = simplifyScientificText(description);
+          }
         } else {
           description = 'No hay descripción disponible.';
         }
         
-        // Añadir una etiqueta para contenido orientado a padres
-        const titleWithTag = isParentFocused && !title.includes('[Para Padres]') 
-                            ? '[Para Padres] ' + title 
-                            : title;
+        // Añadir etiquetas según el tipo de contenido
+        let titleWithTag = title;
+        
+        if (isParentFocused && !title.includes('[Para Padres]')) {
+          titleWithTag = '[Para Padres] ' + title;
+        } else if (isScientific && !title.includes('[Investigación]')) {
+          titleWithTag = '[Investigación] ' + title;
+        }
         
         return {
           title: titleWithTag,

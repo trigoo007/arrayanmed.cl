@@ -305,6 +305,17 @@
             color: var(--text);
         }
         
+        .filter-button.scientific-button {
+            background-color: #e8f4f8;
+            border-color: #84b9cb;
+        }
+        
+        .filter-button.scientific-button:hover,
+        .filter-button.scientific-button.active {
+            background-color: #84b9cb;
+            color: white;
+        }
+        
         .last-updated {
             text-align: center;
             font-size: 0.9rem;
@@ -448,7 +459,7 @@
                 <button class="filter-button highlight-button" data-category="padres">Para Padres</button>
                 <button class="filter-button" data-category="infantil">Salud Mental Infantil</button>
                 <button class="filter-button" data-category="tratamientos">Tratamientos</button>
-                <button class="filter-button" data-category="investigacion">Investigación</button>
+                <button class="filter-button scientific-button" data-category="investigacion">Investigación Científica</button>
                 <button class="filter-button" data-category="prevencion">Prevención</button>
             </div>
             
