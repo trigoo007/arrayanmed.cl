@@ -1,0 +1,58 @@
+name: Update News Feed
+
+on:
+  schedule:
+    - cron: '0 */12 * * *'  # Se ejecuta cada 12 horas
+  workflow_dispatch:  # Permite ejecutar manualmente
+
+jobs:
+  update-news:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          
+      - name: Install dependencies
+        run: |
+          if [ -f "package.json" ]; then
+            npm install
+          else
+            echo '{"name":"arrayanmed-news","version":"1.0.0","private":true}' > package.json
+            npm install
+          fi
+          
+      - name: Fetch news
+        run: node scripts/fetch-news.js
+        
+      - name: Create sample data if script fails
+        run: |
+          if [ ! -f "public/data/news.json" ]; then
+            mkdir -p public/data
+            echo '{
+              "lastUpdated": "'"$(date -u +"%Y-%m-%dT%H:%M:%SZ")"'",
+              "articles": [
+                {
+                  "title": "Ejemplo: Avances en el tratamiento de la ansiedad infantil",
+                  "description": "Este es un artículo de ejemplo generado automáticamente cuando no fue posible obtener noticias reales.",
+                  "image": "https://via.placeholder.com/500x300?text=Salud+Mental",
+                  "date": "'"$(date -u +"%Y-%m-%dT%H:%M:%SZ")"'",
+                  "source": "Sistema Automático",
+                  "link": "#",
+                  "categories": ["infantil", "tratamientos"]
+                }
+              ]
+            }' > public/data/news.json
+          fi
+          
+      - name: Commit changes
+        run: |
+          git config --global user.name 'News Bot'
+          git config --global user.email 'newsbot@example.com'
+          git add public/data/news.json
+          git commit -m "Actualiza feed de noticias - $(date)" || echo "No changes to commit"
+          git push
