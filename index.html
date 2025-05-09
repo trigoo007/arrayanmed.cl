@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Centro Médico Arrayán - Especialistas en Salud Mental Infantil y Adolescente">
+    <title>Centro Médico Arrayán</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #98aa71;            /* Color principal del logo */
+            --primary-dark: #7d8c5a;       /* Versión más oscura */
+            --primary-light: #b3c28e;      /* Versión más clara */
+            --secondary: #FAF8F3;          /* Color secundario del logo */
+            --accent: #e9bf4c;             /* Amarillo dorado como acento */
+            --accent-light: #f5e7c3;       /* Amarillo claro */
+            --light: #FFFFFF;              /* Blanco para fondos */
+            --text: #4A4A4A;               /* Gris oscuro para texto */
+            --light-text: #76797A;         /* Gris claro para texto secundario */
+            --success: #98AA71;            /* El mismo que primary */
+            --warning: #E9D79F;            /* Tono amarillo suave */
+            --font-heading: 'Nunito', 'Quicksand', sans-serif;  /* Fuente principal para títulos */
+            --font-body: 'Quicksand', 'Nunito', sans-serif;     /* Fuente principal para cuerpo */
+            
+            /* Espaciado */
+            --spacing-xs: 5px;
+            --spacing-sm: 10px;
+            --spacing-md: 20px;
+            --spacing-lg: 30px;
+            --spacing-xl: 50px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: var(--font-body);
+            line-height: 1.6;
+            color: var(--text);
+            background-color: var(--secondary);
+            background-image: linear-gradient(120deg, #FAF8F3 0%, #DEEBC1 100%);
+            min-height: 100vh;
+            font-size: 1.1rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--spacing-md);
+        }
+        
+        header {
+            text-align: center;
+            padding: var(--spacing-lg) 0;
+            position: relative;
+        }
+        
+        /* Decoraciones festivas y amigables para niños */
+        header::before {
+            content: '🌿';
+            position: absolute;
+            top: 30px;
+            left: 20px;
+            font-size: 2rem;
+            transform: rotate(-20deg);
+            opacity: 0.6;
+        }
+        
+        header::after {
+            content: '🌿';
+            position: absolute;
+            top: 30px;
+            right: 20px;
+            font-size: 2rem;
+            transform: rotate(20deg);
+            opacity: 0.6;
+        }
+        
+        /* Logo */
+        .logo-container {
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .logo {
+            max-width: 300px;
+            height: auto;
+        }
+        
+        h1 {
+            font-family: var(--font-heading);
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: var(--spacing-sm);
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+        }
+        
+        h1::before, h1::after {
+            content: '✿';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            color: var(--accent);
+            opacity: 0.7;
+        }
+        
+        h1::before {
+            left: -40px;
+        }
+        
+        h1::after {
+            right: -40px;
+        }
+        
+        h2 {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            color: var(--text);
+            margin: var(--spacing-lg) 0 var(--spacing-sm);
+            font-weight: 600;
+        }
+        
+        h3 {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            color: var(--light-text);
+            margin-bottom: var(--spacing-sm);
+            font-weight: 500;
+        }
+        
+        p {
+            margin-bottom: var(--spacing-md);
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+        
+        .main-content {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-lg);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Decoración festiva en el contenido principal */
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, var(--primary-light), var(--primary), var(--accent), var(--primary), var(--primary-light));
+            border-radius: 0 0 5px 5px;
+        }
+        
+        .countdown-container {
+            text-align: center;
+            margin: var(--spacing-xl) 0;
+            padding: var(--spacing-lg);
+            background-color: var(--secondary);
+            border-radius: 20px;
+            position: relative;
+            border: 2px dashed var(--primary-light);
+        }
+        
+        /* Decoraciones festivas en la cuenta regresiva */
+        .countdown-container::before, .countdown-container::after {
+            content: "✿";
+            position: absolute;
+            font-size: 2rem;
+            color: var(--primary-light);
+            opacity: 0.5;
+        }
+        
+        .countdown-container::before {
+            top: 10px;
+            left: 20px;
+            transform: rotate(-15deg);
+        }
+        
+        .countdown-container::after {
+            bottom: 10px;
+            right: 20px;
+            transform: rotate(15deg);
+        }
+        
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-lg);
+        }
+        
+        .countdown-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: white;
+            border-radius: 15px;
+            padding: var(--spacing-md);
+            min-width: 80px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.07);
+            border: 1px solid var(--primary-light);
+            transition: transform 0.3s ease;
+        }
+        
+        .countdown-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .countdown-number {
+            font-family: var(--font-heading);
+            font-size: 2.2rem;
+            color: var(--primary);
+            font-weight: 700;
+        }
+        
+        .countdown-text {
+            font-family: var(--font-heading);
+            font-size: 1rem;
+            color: var(--light-text);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+        
+        .professionals {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--spacing-lg);
+            margin: var(--spacing-xl) 0;
+        }
+        
+        .professional-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(152, 170, 113, 0.2);
+            height: 100%;
+        }
+        
+        .professional-card:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .photo-placeholder {
+            background: linear-gradient(140deg, #f4f8f0 0%, #e2eacb 100%);
+            height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--light-text);
+            font-size: 0.9rem;
+            font-family: var(--font-body);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .photo-placeholder::before {
+            content: '\f2bd';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 400;
+            font-size: 5rem;
+            color: rgba(152, 170, 113, 0.2);
+            position: absolute;
+        }
+        
+        .professional-info {
+            padding: var(--spacing-lg);
+        }
+        
+        .professional-name {
+            font-family: var(--font-heading);
+            font-size: 1.4rem;
+            margin-bottom: var(--spacing-xs);
+            color: var(--text);
+            font-weight: 600;
+        }
+        
+        .professional-title {
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            color: var(--primary);
+            margin-bottom: var(--spacing-sm);
+            font-weight: 500;
+            display: inline-block;
+            padding: 3px 10px;
+            background-color: rgba(152, 170, 113, 0.1);
+            border-radius: 5px;
+        }
+        
+        .services {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-md);
+            margin: var(--spacing-xl) 0;
+        }
+        
+        .service-card {
+            background-color: var(--light);
+            border-radius: 15px;
+            padding: var(--spacing-md);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(152, 170, 113, 0.2);
+            position: relative;
+            height: 100%;
+        }
+        
+        .service-card:hover {
+            background-color: var(--primary-light);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .service-title {
+            font-family: var(--font-heading);
+            font-size: 1.3rem;
+            margin-bottom: var(--spacing-sm);
+            color: var(--text);
+            font-weight: 600;
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .service-title::before {
+            content: '\f058';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            font-size: 1.2rem;
+            color: var(--primary);
+            position: absolute;
+            left: 0;
+            top: 2px;
+        }
+        
+        .alert-card {
+            border-color: rgba(233, 191, 76, 0.3);
+        }
+        
+        .alert-card:hover {
+            background-color: rgba(233, 191, 76, 0.1);
+        }
+        
+        .alert-card .service-title::before {
+            content: '\f071';
+            color: var(--accent);
+        }
+        
+        .contact-section {
+            background-color: white;
+            border-radius: 15px;
+            padding: var(--spacing-xl);
+            margin-top: var(--spacing-xl);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .contact-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(to right, var(--primary), var(--accent), var(--primary));
+        }
+        
+        .placeholder-text {
+            padding: var(--spacing-md);
+            background-color: var(--secondary);
+            border-radius: 15px;
+            color: var(--text);
+            font-style: italic;
+            text-align: center;
+            margin: var(--spacing-sm) 0;
+            font-family: var(--font-body);
+            border: 1px dashed var(--primary-light);
+        }
+        
+        .contact-card {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: var(--spacing-md);
+            margin: var(--spacing-lg) 0;
+            padding: var(--spacing-md);
+            position: relative;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            border-radius: 30px;
+            padding: 12px 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--primary);
+            min-width: 280px;
+        }
+        
+        .contact-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+            background-color: var(--accent-light);
+        }
+        
+        .contact-icon {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-right: var(--spacing-md);
+            background-color: var(--accent-light);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .contact-details {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .contact-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--light-text);
+            margin-bottom: 3px;
+        }
+        
+        .contact-card a {
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .contact-card a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+        
+        .address-highlight {
+            display: inline-block;
+            font-weight: 600;
+            color: var(--text);
+            position: relative;
+        }
+        
+        .access-button {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(152, 170, 113, 0.3);
+            transition: all 0.3s ease;
+            margin: var(--spacing-lg) 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.95rem;
+        }
+        
+        .access-button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(152, 170, 113, 0.4);
+        }
+        
+        .access-button i {
+            margin-right: 8px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: var(--spacing-xl) 0;
+            color: var(--text);
+            font-size: 1rem;
+            font-family: var(--font-body);
+            position: relative;
+            margin-top: var(--spacing-xl);
+        }
+        
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--primary-light), transparent);
+        }
+        
+        @media (max-width: 992px) {
+            .container {
+                padding: var(--spacing-sm);
+            }
+            
+            .logo {
+                max-width: 250px;
+            }
+            
+            h1 {
+                font-size: 2.6rem;
+            }
+            
+            h2 {
+                font-size: 1.9rem;
+            }
+            
+            .main-content {
+                padding: var(--spacing-lg);
+            }
+            
+            .professionals,
+            .services {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            header::before, header::after {
+                font-size: 1.8rem;
+            }
+            
+            h1::before, h1::after {
+                font-size: 1.3rem;
+            }
+            
+            h1::before {
+                left: -30px;
+            }
+            
+            h1::after {
+                right: -30px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            html {
+                font-size: 15px;
+            }
+            
+            .container {
+                padding: var(--spacing-xs);
+            }
+            
+            .logo {
+                max-width: 220px;
+            }
+            
+            .main-content {
+                padding: var(--spacing-lg) var(--spacing-md);
+            }
+            
+            h1 {
+                font-size: 2.3rem;
+            }
+            
+            h2 {
+                font-size: 1.7rem;
+            }
+            
+            header::before {
+                left: 10px;
+                font-size: 1.5rem;
+            }
+            
+            header::after {
+                right: 10px;
+                font-size: 1.5rem;
+            }
+            
+            h1::before, h1::after {
+                font-size: 1.2rem;
+            }
+            
+            h1::before {
+                left: -20px;
+            }
+            
+            h1::after {
+                right: -20px;
+            }
+            
+            .contact-item {
+                width: 100%;
+                min-width: 100%;
+                margin: 0 var(--spacing-md);
+            }
+            
+            .countdown {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .countdown-item {
+                min-width: 80px;
+                margin-bottom: var(--spacing-sm);
+            }
+            
+            .professionals,
+            .services {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-md);
+            }
+            
+            .service-title {
+                font-size: 1.2rem;
+            }
+            
+            .professional-card .photo-placeholder {
+                height: 200px;
+            }
+            
+            .address-highlight {
+                font-size: 0.9rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .logo {
+                max-width: 180px;
+            }
+            
+            h1::before, h1::after {
+                display: none;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+            
+            .main-content {
+                padding: var(--spacing-md);
+                border-radius: 10px;
+            }
+            
+            header::before, header::after {
+                font-size: 1.2rem;
+                top: 20px;
+            }
+            
+            .contact-item {
+                padding: 10px 15px;
+            }
+            
+            .contact-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+                margin-right: var(--spacing-sm);
+            }
+            
+            .contact-label {
+                font-size: 0.75rem;
+            }
+            
+            .countdown-number {
+                font-size: 2rem;
+            }
+            
+            .countdown-item {
+                padding: var(--spacing-sm);
+                min-width: 70px;
+            }
+            
+            .access-button {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+            
+            .professional-card .photo-placeholder {
+                height: 180px;
+            }
+            
+            .professional-info,
+            .service-card {
+                padding: var(--spacing-md);
+            }
+            
+            .address-highlight {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <img src="img/logo.svg" alt="Logo Centro Médico Arrayán" class="logo">
+            </div>
+            <h1>Centro Médico Arrayán</h1>
+            <h3>Especialistas en Salud Mental Infantil y Adolescente</h3>
+            <div class="contact-card">
+                <div class="contact-item">
+                    <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                    <div class="contact-details">
+                        <span class="contact-label">Contáctanos:</span>
+                        <a href="mailto:info@arrayanmed.cl">info@arrayanmed.cl</a>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                    <div class="contact-details">
+                        <span class="contact-label">Encuéntranos en:</span>
+                        <span class="address-highlight">Avenida Las Condes 10465 Of. 817A, Las Condes</span>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: var(--spacing-md);">
+                <a href="login.html" class="access-button"><i class="fas fa-user-md"></i> Acceso Médico</a>
+                <a href="noticias.html" class="access-button" style="background-color: var(--accent); margin-left: 10px;"><i class="fas fa-newspaper"></i> Noticias</a>
+            </div>
+        </header>
+        
+        <div class="main-content">
+            <div class="countdown-container">
+                <h2><i class="far fa-calendar-alt"></i> Próxima Apertura</h2>
+                <p>Estamos trabajando para brindarte la mejor atención especializada en salud mental infantil y adolescente</p>
+                
+                <div class="countdown">
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="days">00</span>
+                        <span class="countdown-text">Días</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="hours">00</span>
+                        <span class="countdown-text">Horas</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="minutes">00</span>
+                        <span class="countdown-text">Minutos</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="seconds">00</span>
+                        <span class="countdown-text">Segundos</span>
+                    </div>
+                </div>
+            </div>
+            
+            <section>
+                <h2><i class="fas fa-clinic-medical"></i> Nuestro Centro</h2>
+                <p>El Centro Médico Arrayán nace con la misión de ofrecer atención especializada en salud mental infantil y adolescente, bajo un enfoque integral y multidisciplinario. Nos encontramos en proceso de formación para brindar a nuestros pacientes un espacio acogedor, seguro y profesional.</p>
+                <p>Comprometidos con la salud mental de niños y adolescentes, nuestro proyecto incluirá un equipo multidisciplinario de profesionales, integrando diferentes especialistas para ofrecer un abordaje completo de la salud mental infantil.</p>
+            </section>
+            
+            <section>
+                <h2><i class="fas fa-user-md"></i> Nuestros Especialistas</h2>
+                <div class="professionals">
+                    <div class="professional-card">
+                        <div class="photo-placeholder">
+                            Espacio para fotografía
+                        </div>
+                        <div class="professional-info">
+                            <div class="professional-name">Dra. Macarena Vera Cabezas</div>
+                            <div class="professional-title">Psiquiatra Infantil</div>
+                            <p>Médico cirujano Universidad de Concepción, especialista en psiquiatría del niño y del adolescente Pontificia Universidad Católica de Chile, Psiquiatra de enlace en Hospital Hernán González Cortés.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="professional-card">
+                        <div class="photo-placeholder">
+                            Espacio para fotografía
+                        </div>
+                        <div class="professional-info">
+                            <div class="professional-name">Dra. Carolina Alegría Salas</div>
+                            <div class="professional-title">Psiquiatra Infantil</div>
+                            <p>Médico cirujano Universidad de Chile, especialista en psiquiatría del niño y del adolescente Pontificia Universidad Católica de Chile, Psiquiatra de enlace en Hospital Hernán González Cortés.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section>
+                <h2><i class="fas fa-hands-helping"></i> Servicios que ofreceremos</h2>
+                <div class="services">
+                    <div class="service-card">
+                        <div class="service-title">Evaluación psiquiátrica integral</div>
+                        <p>Evaluación y formulación diagnóstica integral, plan de tratamiento acorde a las necesidades del paciente y familia.</p>
+                    </div>
+                    
+                    <div class="service-card">
+                        <div class="service-title">Atenciones por equipo multidisciplinario</div>
+                        <p>Abordaje integral con profesionales especializados que trabajan de forma coordinada para ofrecer una atención completa.</p>
+                    </div>
+                    
+                    <div class="service-card">
+                        <div class="service-title">Orientación a padres</div>
+                        <p>Asesoramiento a las familias en el manejo y apoyo a los niños y adolescentes con necesidades especiales.</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section>
+                <h2><i class="fas fa-exclamation-triangle"></i> Signos de alerta</h2>
+                <p>Es importante reconocer los signos que pueden indicar la necesidad de una evaluación profesional en salud mental infantil. Si observa alguno de estos comportamientos de forma persistente en su hijo, le recomendamos buscar apoyo especializado:</p>
+                
+                <div class="services">
+                    <div class="service-card alert-card">
+                        <div class="service-title">Cambios en el comportamiento</div>
+                        <p>Irritabilidad excesiva, agresividad repentina, aislamiento social o pérdida de interés en actividades que antes disfrutaba.</p>
+                    </div>
+                    
+                    <div class="service-card alert-card">
+                        <div class="service-title">Dificultades académicas</div>
+                        <p>Problemas de concentración, bajo rendimiento escolar inexplicable o resistencia inusual a asistir a la escuela.</p>
+                    </div>
+                    
+                    <div class="service-card alert-card">
+                        <div class="service-title">Alteraciones emocionales</div>
+                        <p>Tristeza persistente, preocupaciones excesivas, miedos intensos o cambios bruscos de humor sin causa aparente.</p>
+                    </div>
+                    
+                    <div class="service-card alert-card">
+                        <div class="service-title">Problemas físicos</div>
+                        <p>Quejas somáticas frecuentes como dolores de cabeza o estómago, alteraciones del sueño o cambios significativos en el apetito.</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="contact-section">
+                <h2><i class="fas fa-phone-alt"></i> Información de Contacto</h2>
+                <div class="placeholder-text">
+                    <p><i class="fas fa-map-marker-alt"></i> Avenida Las Condes 10465 Oficina 817A, Las Condes, Santiago</p>
+                    <p>Para consultas: <a href="mailto:info@arrayanmed.cl"><i class="fas fa-envelope"></i> info@arrayanmed.cl</a></p>
+                </div>
+            </section>
+        </div>
+        
+        <footer>
+            <p>&copy; 2025 Centro Médico Arrayán - Todos los derechos reservados</p>
+            <p>Contacto: <a href="mailto:info@arrayanmed.cl">info@arrayanmed.cl</a></p>
+        </footer>
+    </div>
+    
+    <script>
+        // Configurar la fecha objetivo (45 días a partir de ahora)
+        const countDownDate = new Date();
+        countDownDate.setDate(countDownDate.getDate() + 45);
+        
+        // Actualizar la cuenta atrás cada segundo
+        const countdownTimer = setInterval(function() {
+            // Obtener la fecha y hora de hoy
+            const now = new Date().getTime();
+            
+            // Encontrar la distancia entre ahora y la fecha objetivo
+            const distance = countDownDate - now;
+            
+            // Cálculos de tiempo para días, horas, minutos y segundos
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            
+            // Mostrar el resultado
+            document.getElementById("days").innerHTML = String(days).padStart(2, "0");
+            document.getElementById("hours").innerHTML = String(hours).padStart(2, "0");
+            document.getElementById("minutes").innerHTML = String(minutes).padStart(2, "0");
+            document.getElementById("seconds").innerHTML = String(seconds).padStart(2, "0");
+            
+            // Si la cuenta atrás ha terminado, mostrar un texto
+            if (distance < 0) {
+                clearInterval(countdownTimer);
+                document.getElementById("days").innerHTML = "00";
+                document.getElementById("hours").innerHTML = "00";
+                document.getElementById("minutes").innerHTML = "00";
+                document.getElementById("seconds").innerHTML = "00";
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

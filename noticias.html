@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Centro Médico Arrayán - Noticias sobre Salud Mental">
+    <title>Noticias - Centro Médico Arrayán</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #98aa71;            /* Color principal del logo */
+            --primary-dark: #7d8c5a;       /* Versión más oscura */
+            --primary-light: #b3c28e;      /* Versión más clara */
+            --secondary: #FAF8F3;          /* Color secundario del logo */
+            --accent: #e9bf4c;             /* Amarillo dorado como acento */
+            --accent-light: #f5e7c3;       /* Amarillo claro */
+            --light: #FFFFFF;              /* Blanco para fondos */
+            --text: #4A4A4A;               /* Gris oscuro para texto */
+            --light-text: #76797A;         /* Gris claro para texto secundario */
+            --success: #98AA71;            /* El mismo que primary */
+            --warning: #E9D79F;            /* Tono amarillo suave */
+            --font-heading: 'Nunito', 'Quicksand', sans-serif;  /* Fuente principal para títulos */
+            --font-body: 'Quicksand', 'Nunito', sans-serif;     /* Fuente principal para cuerpo */
+            
+            /* Espaciado */
+            --spacing-xs: 5px;
+            --spacing-sm: 10px;
+            --spacing-md: 20px;
+            --spacing-lg: 30px;
+            --spacing-xl: 50px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: var(--font-body);
+            line-height: 1.6;
+            color: var(--text);
+            background-color: var(--secondary);
+            background-image: linear-gradient(120deg, #FAF8F3 0%, #DEEBC1 100%);
+            min-height: 100vh;
+            font-size: 1.1rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--spacing-md);
+        }
+        
+        header {
+            text-align: center;
+            padding: var(--spacing-lg) 0;
+            position: relative;
+        }
+        
+        /* Decoraciones festivas y amigables para niños */
+        header::before {
+            content: '🌿';
+            position: absolute;
+            top: 30px;
+            left: 20px;
+            font-size: 2rem;
+            transform: rotate(-20deg);
+            opacity: 0.6;
+        }
+        
+        header::after {
+            content: '🌿';
+            position: absolute;
+            top: 30px;
+            right: 20px;
+            font-size: 2rem;
+            transform: rotate(20deg);
+            opacity: 0.6;
+        }
+        
+        /* Logo */
+        .logo-container {
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .logo {
+            max-width: 300px;
+            height: auto;
+        }
+        
+        h1 {
+            font-family: var(--font-heading);
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: var(--spacing-sm);
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+        }
+        
+        h1::before, h1::after {
+            content: '✿';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            color: var(--accent);
+            opacity: 0.7;
+        }
+        
+        h1::before {
+            left: -40px;
+        }
+        
+        h1::after {
+            right: -40px;
+        }
+        
+        h2 {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            color: var(--text);
+            margin: var(--spacing-lg) 0 var(--spacing-sm);
+            font-weight: 600;
+        }
+        
+        h3 {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            color: var(--light-text);
+            margin-bottom: var(--spacing-sm);
+            font-weight: 500;
+        }
+        
+        p {
+            margin-bottom: var(--spacing-md);
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+        
+        .main-content {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-lg);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Decoración festiva en el contenido principal */
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, var(--primary-light), var(--primary), var(--accent), var(--primary), var(--primary-light));
+            border-radius: 0 0 5px 5px;
+        }
+        
+        /* Estilos para la sección de noticias */
+        .news-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: var(--spacing-lg);
+            margin-top: var(--spacing-xl);
+        }
+        
+        .news-card {
+            background-color: var(--light);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(152, 170, 113, 0.1);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .news-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .news-image {
+            height: 180px;
+            background-color: #f5f5f5;
+            background-position: center;
+            background-size: cover;
+            position: relative;
+        }
+        
+        .news-source {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 4px 10px;
+            font-size: 0.8rem;
+            border-radius: 5px 0 0 0;
+        }
+        
+        .news-content {
+            padding: var(--spacing-md);
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .news-title {
+            font-size: 1.3rem;
+            line-height: 1.4;
+            margin-bottom: var(--spacing-sm);
+            font-weight: 600;
+            color: var(--text);
+            font-family: var(--font-heading);
+        }
+        
+        .news-date {
+            font-size: 0.85rem;
+            color: var(--light-text);
+            margin-bottom: var(--spacing-sm);
+            display: flex;
+            align-items: center;
+        }
+        
+        .news-date i {
+            margin-right: 5px;
+            color: var(--primary);
+        }
+        
+        .news-description {
+            font-size: 1rem;
+            margin-bottom: var(--spacing-md);
+            color: var(--text);
+            flex-grow: 1;
+        }
+        
+        .news-link {
+            display: inline-block;
+            padding: 8px 15px;
+            background-color: var(--primary-light);
+            color: var(--text);
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-top: auto;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+        
+        .news-link:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .news-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-lg);
+            justify-content: center;
+        }
+        
+        .filter-button {
+            background-color: white;
+            border: 1px solid var(--primary-light);
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .filter-button:hover,
+        .filter-button.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .last-updated {
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--light-text);
+            margin-top: var(--spacing-sm);
+            font-style: italic;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: var(--spacing-xl);
+            font-size: 1.2rem;
+            color: var(--light-text);
+        }
+        
+        .loading i {
+            animation: spin 1s infinite linear;
+            margin-right: var(--spacing-sm);
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .home-link {
+            display: inline-flex;
+            align-items: center;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-md);
+            transition: color 0.3s ease;
+        }
+        
+        .home-link:hover {
+            color: var(--primary-dark);
+        }
+        
+        .home-link i {
+            margin-right: 8px;
+        }
+        
+        /* Estilos responsive para la página de noticias */
+        @media (max-width: 992px) {
+            .container {
+                padding: var(--spacing-sm);
+            }
+            
+            .logo {
+                max-width: 250px;
+            }
+            
+            .news-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            html {
+                font-size: 15px;
+            }
+            
+            .logo {
+                max-width: 220px;
+            }
+            
+            h1 {
+                font-size: 2.3rem;
+            }
+            
+            .news-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .news-image {
+                height: 160px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .logo {
+                max-width: 180px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h1::before, h1::after {
+                display: none;
+            }
+            
+            .filter-button {
+                font-size: 0.8rem;
+                padding: 6px 12px;
+            }
+        }
+        
+        footer {
+            text-align: center;
+            padding: var(--spacing-xl) 0;
+            color: var(--text);
+            font-size: 1rem;
+            font-family: var(--font-body);
+            position: relative;
+            margin-top: var(--spacing-xl);
+        }
+        
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--primary-light), transparent);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <img src="img/logo.svg" alt="Logo Centro Médico Arrayán" class="logo">
+            </div>
+            <h1>Centro Médico Arrayán</h1>
+            <h3>Noticias sobre Salud Mental</h3>
+        </header>
+        
+        <div class="main-content">
+            <a href="index.html" class="home-link"><i class="fas fa-chevron-left"></i> Volver a la página principal</a>
+            
+            <h2><i class="fas fa-newspaper"></i> Noticias Recientes</h2>
+            <p>Mantente informado con las últimas noticias y avances en el campo de la salud mental. Nuestro portal recopila información de fuentes confiables para brindarte contenido relevante y actualizado.</p>
+            
+            <div class="news-filters">
+                <button class="filter-button active" data-category="all">Todas las noticias</button>
+                <button class="filter-button" data-category="infantil">Salud Mental Infantil</button>
+                <button class="filter-button" data-category="tratamientos">Tratamientos</button>
+                <button class="filter-button" data-category="investigacion">Investigación</button>
+                <button class="filter-button" data-category="prevencion">Prevención</button>
+            </div>
+            
+            <p class="last-updated">Última actualización: <span id="update-time">Cargando...</span></p>
+            
+            <div id="news-container" class="news-container">
+                <div class="loading">
+                    <i class="fas fa-spinner"></i> Cargando noticias...
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>&copy; 2025 Centro Médico Arrayán - Todos los derechos reservados</p>
+            <p>Contacto: <a href="mailto:info@arrayanmed.cl">info@arrayanmed.cl</a></p>
+        </footer>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Función para cargar las noticias
+            async function loadNews() {
+                try {
+                    // En una implementación real, esto cargaría desde un endpoint o archivo JSON actualizado por GitHub Actions
+                    // Por ahora, usaremos datos estáticos como demostración
+                    const newsData = await fetchNewsData();
+                    displayNews(newsData);
+                    
+                    // Actualizar la hora de última actualización
+                    const now = new Date();
+                    document.getElementById('update-time').textContent = now.toLocaleString();
+                } catch (error) {
+                    console.error('Error al cargar noticias:', error);
+                    document.getElementById('news-container').innerHTML = `
+                        <div style="text-align: center; padding: 30px; color: #666;">
+                            <p><i class="fas fa-exclamation-circle"></i> Lo sentimos, hubo un problema al cargar las noticias.</p>
+                            <p>Por favor, intenta de nuevo más tarde.</p>
+                        </div>
+                    `;
+                }
+            }
+            
+            // Función para obtener datos de noticias desde el archivo JSON
+            async function fetchNewsData() {
+                try {
+                    // Intentar cargar el archivo JSON generado por GitHub Actions
+                    const response = await fetch('data/news.json');
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
+                    const data = await response.json();
+                    document.getElementById('update-time').textContent = new Date(data.lastUpdated).toLocaleString();
+                    return data.articles;
+                } catch (error) {
+                    console.warn('Error al cargar el archivo de noticias, usando datos de demostración', error);
+                    
+                    // Si no se puede cargar el archivo JSON, usar datos de demostración
+                    return [
+                        {
+                            title: "Nuevos enfoques terapéuticos para el TDAH en adolescentes",
+                            description: "Un estudio reciente revela la efectividad de terapias combinadas que integran aspectos cognitivos y conductuales para el tratamiento del TDAH en adolescentes.",
+                            image: "https://img.freepik.com/free-photo/portrait-young-girl-sitting-desk_23-2149013882.jpg",
+                            date: "2025-05-05",
+                            source: "Journal of Child Psychology",
+                            link: "#",
+                            categories: ["infantil", "tratamientos"]
+                        },
+                        {
+                            title: "La importancia del sueño en la salud mental de los niños",
+                            description: "Investigadores destacan cómo los patrones de sueño afectan el desarrollo cognitivo y emocional en la infancia, sugiriendo estrategias para mejorar la higiene del sueño.",
+                            image: "https://img.freepik.com/free-photo/side-view-little-girl-sleeping_23-2148982341.jpg",
+                            date: "2025-05-02",
+                            source: "Sleep Medicine",
+                            link: "#",
+                            categories: ["infantil", "prevencion"]
+                        },
+                        {
+                            title: "Avances en la detección temprana de trastornos del espectro autista",
+                            description: "Nuevas herramientas de screening permiten identificar señales de TEA desde los 18 meses, facilitando intervenciones más tempranas y efectivas.",
+                            image: "https://img.freepik.com/free-photo/child-having-appointment-with-psychologist_23-2149338712.jpg",
+                            date: "2025-04-28",
+                            source: "Autism Research",
+                            link: "#",
+                            categories: ["infantil", "investigacion"]
+                        },
+                        {
+                            title: "Estudio relaciona la nutrición con el desarrollo cognitivo en la infancia",
+                            description: "Una alimentación rica en ácidos grasos omega-3 podría tener efectos positivos en el desarrollo cerebral y la salud mental en niños, según nueva investigación.",
+                            image: "https://img.freepik.com/free-photo/young-mother-trying-feed-her-cute-little-daughter_1157-45592.jpg",
+                            date: "2025-04-25",
+                            source: "Nutritional Neuroscience",
+                            link: "#",
+                            categories: ["infantil", "investigacion", "prevencion"]
+                        },
+                        {
+                            title: "Impacto del uso de pantallas en el desarrollo emocional de los niños",
+                            description: "Nuevas guías sugieren límites de tiempo de exposición a dispositivos electrónicos y estrategias para un uso saludable de la tecnología en diferentes etapas del desarrollo.",
+                            image: "https://img.freepik.com/free-photo/front-view-child-looking-tablet_23-2148499510.jpg",
+                            date: "2025-04-20",
+                            source: "Digital Health Journal",
+                            link: "#",
+                            categories: ["infantil", "prevencion"]
+                        },
+                        {
+                            title: "Terapias basadas en mindfulness muestran resultados prometedores en ansiedad infantil",
+                            description: "Programas adaptados de atención plena ayudan a niños con trastornos de ansiedad a desarrollar habilidades de autorregulación emocional.",
+                            image: "https://img.freepik.com/free-photo/young-beautiful-woman-sitting-yoga-pose-doing-breathing-exercises-home_155003-37892.jpg",
+                            date: "2025-04-15",
+                            source: "Mindfulness Research",
+                            link: "#",
+                            categories: ["tratamientos", "infantil"]
+                        }
+                    ];
+                }
+            }
+            
+            // Función para mostrar las noticias en la página
+            function displayNews(news, filter = 'all') {
+                const container = document.getElementById('news-container');
+                
+                // Filtrar noticias según la categoría seleccionada
+                const filteredNews = filter === 'all' 
+                    ? news 
+                    : news.filter(item => item.categories.includes(filter));
+                
+                // Si no hay noticias después del filtrado
+                if (filteredNews.length === 0) {
+                    container.innerHTML = `
+                        <div style="text-align: center; padding: 30px; grid-column: 1 / -1; color: #666;">
+                            <p><i class="fas fa-info-circle"></i> No hay noticias disponibles en esta categoría.</p>
+                            <p>Por favor, selecciona otra categoría o vuelve más tarde.</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Generar HTML para cada noticia
+                const newsHTML = filteredNews.map(item => {
+                    const date = new Date(item.date);
+                    const formattedDate = date.toLocaleDateString('es-ES', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
+                    
+                    return `
+                        <article class="news-card">
+                            <div class="news-image" style="background-image: url('${item.image}')">
+                                <div class="news-source">${item.source}</div>
+                            </div>
+                            <div class="news-content">
+                                <h3 class="news-title">${item.title}</h3>
+                                <div class="news-date">
+                                    <i class="far fa-calendar-alt"></i> ${formattedDate}
+                                </div>
+                                <p class="news-description">${item.description}</p>
+                                <a href="${item.link}" class="news-link" target="_blank">Leer más</a>
+                            </div>
+                        </article>
+                    `;
+                }).join('');
+                
+                container.innerHTML = newsHTML;
+            }
+            
+            // Configurar filtros
+            const filterButtons = document.querySelectorAll('.filter-button');
+            filterButtons.forEach(button => {
+                button.addEventListener('click', async function() {
+                    // Actualizar estilo de botones
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Obtener categoría y filtrar noticias
+                    const category = this.getAttribute('data-category');
+                    const newsData = await fetchNewsData();
+                    displayNews(newsData, category);
+                });
+            });
+            
+            // Cargar noticias al inicio
+            loadNews();
+        });
+    </script>
+</body>
+</html>
