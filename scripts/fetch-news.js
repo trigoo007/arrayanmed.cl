@@ -48,11 +48,57 @@ async function fetchRssAsJson(rssUrl) {
   }
 }
 
+// Función simple para traducir texto de inglés a español
+// En un entorno de producción, se recomendaría usar una API de traducción profesional
+function translateToSpanish(text) {
+  // Diccionario básico de términos comunes de salud mental
+  const dictionary = {
+    'mental health': 'salud mental',
+    'depression': 'depresión',
+    'anxiety': 'ansiedad',
+    'therapy': 'terapia',
+    'treatment': 'tratamiento',
+    'children': 'niños',
+    'child': 'niño',
+    'adolescent': 'adolescente',
+    'teenager': 'adolescente',
+    'parents': 'padres',
+    'symptoms': 'síntomas',
+    'diagnosis': 'diagnóstico',
+    'psychiatrist': 'psiquiatra',
+    'psychologist': 'psicólogo',
+    'behavior': 'comportamiento',
+    'suicide': 'suicidio',
+    'autism': 'autismo',
+    'ADHD': 'TDAH',
+    'medications': 'medicamentos',
+    'family': 'familia',
+    'school': 'escuela',
+    'guidance': 'orientación',
+    'support': 'apoyo',
+    'help': 'ayuda',
+    'strategies': 'estrategias',
+    'resources': 'recursos',
+    'tips': 'consejos',
+    'advice': 'recomendaciones'
+  };
+  
+  // Reemplazar palabras conocidas
+  let translatedText = text;
+  Object.entries(dictionary).forEach(([eng, esp]) => {
+    const regex = new RegExp('\\b' + eng + '\\b', 'gi');
+    translatedText = translatedText.replace(regex, esp);
+  });
+  
+  return translatedText;
+}
+
 // Función para buscar artículos relacionados con la salud mental
 async function fetchMentalHealthArticles() {
   try {
     // Lista de fuentes RSS de salud mental confiables
     const sources = [
+      { url: 'https://www.aacap.org/AACAP/Families_and_Youth/RSS_Families.aspx', name: 'AACAP', parentFocused: true },
       { url: 'https://www.nimh.nih.gov/news/science-news/index.xml', name: 'NIMH' },
       { url: 'https://psychcentral.com/feed', name: 'PsychCentral' },
       { url: 'https://www.who.int/news/item/feed/atom', name: 'World Health Organization' },
@@ -66,6 +112,14 @@ async function fetchMentalHealthArticles() {
       'ansiedad', 'anxiety', 'depresión', 'depression', 'TDAH', 'ADHD', 'autismo', 'autism',
       'terapia', 'therapy', 'psicólogo', 'psychologist', 'psiquiatra', 'psychiatrist',
       'infantil', 'children', 'niños', 'adolescentes', 'adolescents', 'tratamiento', 'treatment'
+    ];
+    
+    // Palabras clave que indican contenido orientado a padres
+    const parentFocusedKeywords = [
+      'guía para padres', 'parents guide', 'guide for parents', 'consejos para padres', 'para familias', 
+      'for families', 'guía familiar', 'family guide', 'crianza', 'parenting', 'padres', 'parents',
+      'cómo ayudar', 'how to help', 'signos de alerta', 'warning signs', 'cuándo preocuparse',
+      'when to worry', 'cómo hablar con', 'how to talk to', 'desarrollo infantil', 'child development'
     ];
 
     // Obtener artículos de todas las fuentes
@@ -104,6 +158,14 @@ async function fetchMentalHealthArticles() {
           categories.push('prevencion');
         }
         
+        // Verificar si el contenido está orientado a padres
+        const isParentFocused = source.parentFocused || 
+                                parentFocusedKeywords.some(keyword => contentText.includes(keyword.toLowerCase()));
+        
+        if (isParentFocused) {
+          categories.push('padres');
+        }
+        
         // Si no se detectaron categorías específicas, añadir una genérica
         if (categories.length === 0) {
           categories.push('general');
@@ -126,16 +188,35 @@ async function fetchMentalHealthArticles() {
           }
         }
         
+        // Traducir título y descripción al español si están en inglés
+        // (Detección simple: si la mayoría del texto no contiene caracteres españoles como tildes, ñ, etc.)
+        const needsTranslation = !(/[áéíóúñüÁÉÍÓÚÑÜ¿¡]/.test(item.title)) && item.title.length > 10;
+        
+        const title = needsTranslation ? translateToSpanish(item.title) : item.title;
+        let description = '';
+        
+        if (item.description) {
+          const cleanDesc = item.description.replace(/<\/?[^>]+(>|$)/g, '');
+          const truncatedDesc = cleanDesc.substring(0, 200) + '...';
+          description = needsTranslation ? translateToSpanish(truncatedDesc) : truncatedDesc;
+        } else {
+          description = 'No hay descripción disponible.';
+        }
+        
+        // Añadir una etiqueta para contenido orientado a padres
+        const titleWithTag = isParentFocused && !title.includes('[Para Padres]') 
+                            ? '[Para Padres] ' + title 
+                            : title;
+        
         return {
-          title: item.title,
-          description: item.description 
-            ? item.description.replace(/<\/?[^>]+(>|$)/g, '').substring(0, 200) + '...' 
-            : 'No hay descripción disponible.',
+          title: titleWithTag,
+          description: description,
           image: imageUrl,
           date: item.pubDate || new Date().toISOString(),
           source: source.name,
           link: item.link,
-          categories: categories
+          categories: categories,
+          forParents: isParentFocused
         };
       }).filter(item => item !== null); // Eliminar artículos que no son relevantes
     });

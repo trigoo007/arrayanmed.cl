@@ -293,6 +293,18 @@
             color: white;
         }
         
+        .filter-button.highlight-button {
+            background-color: var(--accent-light);
+            border-color: var(--accent);
+            position: relative;
+        }
+        
+        .filter-button.highlight-button:hover,
+        .filter-button.highlight-button.active {
+            background-color: var(--accent);
+            color: var(--text);
+        }
+        
         .last-updated {
             text-align: center;
             font-size: 0.9rem;
@@ -433,6 +445,7 @@
             
             <div class="news-filters">
                 <button class="filter-button active" data-category="all">Todas las noticias</button>
+                <button class="filter-button highlight-button" data-category="padres">Para Padres</button>
                 <button class="filter-button" data-category="infantil">Salud Mental Infantil</button>
                 <button class="filter-button" data-category="tratamientos">Tratamientos</button>
                 <button class="filter-button" data-category="investigacion">Investigación</button>
